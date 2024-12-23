@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 export const EarthCycle = ({earthCycle}) => {
     return (
-        <ThemedView style={{flex: 1, backgroundColor: '#222', borderRadius: 15, padding: 20, alignItems: 'center'}}>
+        <ThemedView style={{flex: 1, backgroundColor: '#222', borderRadius: 15, padding: 10, alignItems: 'center'}}>
             <ThemedText type={'subtitle'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Terre</ThemedText>
 
             <ThemedText style={{color: 'white', textAlign: 'center'}}>{earthCycle?.timeLeft}</ThemedText>

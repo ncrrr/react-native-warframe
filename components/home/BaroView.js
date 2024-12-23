@@ -20,7 +20,7 @@ export const BaroView = ({voidTrader}) => {
                             </ThemedView>
                         )}
                     /> :
-                    <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Baro cones in {voidTrader?.startString}</ThemedText>
+                    <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Baro comes in {voidTrader?.startString}</ThemedText>
 
             }
         </ThemedView>

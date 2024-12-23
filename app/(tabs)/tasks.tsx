@@ -12,9 +12,9 @@ import React from "react";
 export default function TasksScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#7a0101', dark: '#782f2f' }}
+      headerBackgroundColor={{ light: '#CAA200', dark: '#3B7039' }}
       headerImage={
-          <FontAwesome5 size={200} name="tasks" color="#bf0202" style={styles.headerImage} />
+          <FontAwesome5 size={250} name="tasks" color="#bf0202" style={styles.headerImage} />
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Tasks</ThemedText>

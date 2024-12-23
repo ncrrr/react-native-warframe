@@ -13,6 +13,7 @@ import {EarthCycle} from "@/components/home/cycles/EarthCycle";
 import {CetusCycle} from "@/components/home/cycles/CetusCycle";
 import {CambionCycle} from "@/components/home/cycles/CambionCycle";
 import {ZarimanCycle} from "@/components/home/cycles/ZarimanCycle";
+import DatabaseManager from "@/database/DatabaseManager";
 
 export default function HomeScreen() {
 

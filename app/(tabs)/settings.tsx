@@ -14,7 +14,7 @@ export default function SettingsScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
-          <Ionicons name="settings-sharp" size={200} color="#ff0000" style={styles.headerImage} />
+          <Ionicons name="settings-sharp" size={310} color="#ff0000" style={styles.headerImage} />
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Settings</ThemedText>
@@ -95,8 +95,8 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   headerImage: {
     color: '#808080',
-    bottom: -90,
-    left: -15,
+    bottom: -130,
+    left: -55,
     position: 'absolute',
   },
   titleContainer: {
