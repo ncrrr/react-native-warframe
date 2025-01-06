@@ -14,6 +14,7 @@ import {CetusCycle} from "@/components/home/cycles/CetusCycle";
 import {CambionCycle} from "@/components/home/cycles/CambionCycle";
 import {ZarimanCycle} from "@/components/home/cycles/ZarimanCycle";
 import DatabaseManager from "@/database/DatabaseManager";
+import {FissuresView} from "@/components/home/FissuresView";
 
 export default function HomeScreen() {
 
