@@ -1,7 +1,7 @@
-import {Image, StyleSheet, Platform, RefreshControl} from 'react-native';
+import {Image, StyleSheet, Platform, RefreshControl, SafeAreaView} from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {getWarframeStats} from "@/api/warframeStats";
 import {AlertsView} from "@/components/home/AlertsView";
 import {NewsView} from "@/components/home/NewsView";
@@ -15,21 +15,16 @@ import {CambionCycle} from "@/components/home/cycles/CambionCycle";
 import {ZarimanCycle} from "@/components/home/cycles/ZarimanCycle";
 import DatabaseManager from "@/database/DatabaseManager";
 import {FissuresView} from "@/components/home/FissuresView";
+import {DataHandlerContext} from "@/contexts/DataHandlerContext";
+import {ThemedText} from "@/components/ThemedText";
 
 export default function HomeScreen() {
 
     const [refreshing, setRefreshing] = useState(false);
-    const [apiData, setApiData] = useState({});
+    const {wfStats, wfProfile, getApiDatas} = useContext(DataHandlerContext)
 
-    useEffect(() => {
-        getApiDatas()
-    }, []);
+    console.log(wfProfile)
 
-    const getApiDatas = async () => {
-        console.log('getApiDatas')
-        const datas = await getWarframeStats();
-        setApiData(datas)
-    }
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
@@ -42,26 +37,32 @@ export default function HomeScreen() {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
             headerImage={
-                <Image
-                    source={require('@/assets/images/warframe-icon.png')}
-                    style={styles.reactLogo}
-                />
+                <>
+                    <Image
+                        source={require('@/assets/images/warframe-icon.png')}
+                        style={styles.reactLogo}
+                    />
+                    {wfProfile?.displayName && <ThemedView style={styles.userInfos}>
+                        <ThemedText style={styles.masteryRank}>{wfProfile?.displayName?.slice(0, -1)}</ThemedText>
+                        <ThemedText style={styles.masteryRank}>MR {wfProfile?.masteryRank}</ThemedText>
+                    </ThemedView>}
+                </>
             }>
-            <BaroView voidTrader={apiData?.voidTrader}></BaroView>
+            <BaroView voidTrader={wfStats?.voidTrader}></BaroView>
             <ThemedView style={styles.parentCycles}>
                 <ThemedView style={styles.childCycles}>
-                    <EarthCycle earthCycle={apiData?.earthCycle}></EarthCycle>
-                    <CetusCycle cetusCycle={apiData?.cetusCycle}></CetusCycle>
+                    <EarthCycle updateDatas={getApiDatas} earthCycle={wfStats?.earthCycle}></EarthCycle>
+                    <CetusCycle updateDatas={getApiDatas} cetusCycle={wfStats?.cetusCycle}></CetusCycle>
                 </ThemedView>
                 <ThemedView style={styles.childCycles}>
-                    <CambionCycle cambionCycle={apiData?.cambionCycle}></CambionCycle>
-                    <ZarimanCycle zarimanCycle={apiData?.zarimanCycle}></ZarimanCycle>
+                    <CambionCycle updateDatas={getApiDatas} cambionCycle={wfStats?.cambionCycle}></CambionCycle>
+                    <ZarimanCycle updateDatas={getApiDatas} zarimanCycle={wfStats?.zarimanCycle}></ZarimanCycle>
                 </ThemedView>
             </ThemedView>
-            <AlertsView alerts={apiData?.alerts}></AlertsView>
-            <EventsView events={apiData?.events}></EventsView>
-            <SortieView sortie={apiData?.sortie}></SortieView>
-            <NewsView news={apiData?.news}></NewsView>
+            <AlertsView alerts={wfStats?.alerts} updateDatas={getApiDatas}></AlertsView>
+            <EventsView events={wfStats?.events}></EventsView>
+            <SortieView sortie={wfStats?.sortie}></SortieView>
+            <NewsView news={wfStats?.news}></NewsView>
             {/* TODO: syndicate missions */}
             {/* TODO: fissures */}
 
@@ -94,5 +95,18 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 10,
         justifyContent: "space-evenly"
+    },
+    masteryRank: {
+        fontSize: 20,
+        color: 'white',
+        textAlign: 'right'
+    },
+    userInfos: {
+        position: 'absolute',
+        top: 50,
+        right: 10,
+        padding: 10,
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        borderRadius: 5
     }
 });

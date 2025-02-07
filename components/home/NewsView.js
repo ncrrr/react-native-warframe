@@ -14,7 +14,7 @@ export const NewsView = ({news}) => {
 
     return (
         <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
-            <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700, paddingBottom: 10}}>Actualités</ThemedText>
+            <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700, paddingBottom: 10}}>Actualités ({news?.length})</ThemedText>
 
             {
                 news?.length >=1 ?

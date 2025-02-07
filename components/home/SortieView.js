@@ -1,10 +1,14 @@
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 import {Button, FlatList} from "react-native";
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {DataHandlerContext} from "@/contexts/DataHandlerContext";
+import CustomTimer from "@/components/ui/CustomTimer";
 
 
-export const SortieView = ({sortie}) => {
+export const SortieView = ({}) => {
+    const {updateDatas, wfStats} = useContext(DataHandlerContext)
+    const {sortie} = wfStats
 
     const [expandList, setExpandList] = useState(false);
 
@@ -18,6 +22,11 @@ export const SortieView = ({sortie}) => {
             <ThemedView style={{margin: 10, backgroundColor: '#222'}}>
                 <ThemedText type={'subtitle'}>Boss</ThemedText>
                 <ThemedText>{sortie?.boss} - {sortie?.boss}</ThemedText>
+                <ThemedText>Reset dans: <CustomTimer
+                        targetDate={sortie?.expiry}
+                        updateDatas={updateDatas}
+                    />
+                </ThemedText>
 
             </ThemedView>
 
