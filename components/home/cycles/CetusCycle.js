@@ -3,9 +3,15 @@ import {ThemedText} from "../../ThemedText";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Timeframe from 'react-timeframe';
 import CustomTimer from "@/components/ui/CustomTimer";
+import {useContext} from "react";
+import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 
 
-export const CetusCycle = ({cetusCycle, updateDatas}) => {
+export const CetusCycle = ({}) => {
+    const {wfStats, wfProfile, updateDatas} = useContext(DataHandlerContext)
+
+    const {cetusCycle} = wfStats
+
     return (
         <ThemedView style={{flex: 1,backgroundColor: '#222', borderRadius: 15, padding: 10, alignItems: 'center'}}>
             <ThemedText type={'subtitle'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Cetus</ThemedText>

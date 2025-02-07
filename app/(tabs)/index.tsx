@@ -48,23 +48,24 @@ export default function HomeScreen() {
                     </ThemedView>}
                 </>
             }>
-            <BaroView voidTrader={wfStats?.voidTrader}></BaroView>
+            <BaroView></BaroView>
             <ThemedView style={styles.parentCycles}>
                 <ThemedView style={styles.childCycles}>
-                    <EarthCycle updateDatas={getApiDatas} earthCycle={wfStats?.earthCycle}></EarthCycle>
-                    <CetusCycle updateDatas={getApiDatas} cetusCycle={wfStats?.cetusCycle}></CetusCycle>
+                    <EarthCycle></EarthCycle>
+                    <CetusCycle></CetusCycle>
                 </ThemedView>
                 <ThemedView style={styles.childCycles}>
-                    <CambionCycle updateDatas={getApiDatas} cambionCycle={wfStats?.cambionCycle}></CambionCycle>
-                    <ZarimanCycle updateDatas={getApiDatas} zarimanCycle={wfStats?.zarimanCycle}></ZarimanCycle>
+                    <CambionCycle></CambionCycle>
+                    <ZarimanCycle></ZarimanCycle>
                 </ThemedView>
             </ThemedView>
-            <AlertsView alerts={wfStats?.alerts} updateDatas={getApiDatas}></AlertsView>
-            <EventsView events={wfStats?.events}></EventsView>
-            <SortieView sortie={wfStats?.sortie}></SortieView>
-            <NewsView news={wfStats?.news}></NewsView>
+            <AlertsView></AlertsView>
+            <EventsView></EventsView>
+            <SortieView></SortieView>
+            <NewsView></NewsView>
             {/* TODO: syndicate missions */}
             {/* TODO: fissures */}
+            <FissuresView></FissuresView>
 
         </ParallaxScrollView>
     );
