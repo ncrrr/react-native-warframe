@@ -10,16 +10,16 @@ import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 export const BaroView = ({}) => {
 
     const {wfStats, wfProfile, getApiDatas} = useContext(DataHandlerContext)
-    const [expandList, setExpandList] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const toggleExpandList = () => {
-        setExpandList(!expandList)
+    const toggleModalOpen = () => {
+        setIsModalOpen(!isModalOpen)
     }
 
     const {voidTrader} = wfStats
 
     return (
-        <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10, maxHeight: expandList ? null : 250}}>
+        <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
             <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Baro Ki'Teer</ThemedText>
 
             {
@@ -42,15 +42,17 @@ export const BaroView = ({}) => {
                             )}
                         />
                     </> :
-                    <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Ouvre dans:
-                        <CustomTimer
+                    <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Ouvre dans: <CustomTimer
                             targetDate={voidTrader?.activation}
                             updateDatas={getApiDatas}
                         ></CustomTimer>
                     </ThemedText>
 
             }
-            <Button onPress={() => toggleExpandList()} title={expandList ? 'Cacher' : 'Afficher'}></Button>
+            {
+                // only show this button if the trader is active
+                voidTrader.active && <Button onPress={() => toggleModalOpen()} title={isModalOpen ? 'Cacher' : 'Afficher'}></Button>
+            }
         </ThemedView>
     );
 }

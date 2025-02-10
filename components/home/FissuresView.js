@@ -12,11 +12,8 @@ export const FissuresView = ({}) => {
     const {fissures} = wfStats
 
     const customFissureFilter = (aFissure) => {
-        return aFissure.tier === "Omnia" && (
-            aFissure.missionType.toLowerCase().includes('cascade') ||
-            aFissure.missionType.toLowerCase().includes('conjonction') ||
-            aFissure.missionType.toLowerCase().includes('disruption')
-        )
+        return ( aFissure.tier === "Omnia" && aFissure.isHard) && ( aFissure.missionType.toLowerCase().includes('cascade') || aFissure.missionType.toLowerCase().includes('conjonction')) ||
+            ( aFissure.isHard && ( aFissure.missionType.toLowerCase().includes('perturbation') || aFissure.missionType.toLowerCase().includes('conjonction')))
     }
 
     return (
@@ -31,11 +28,10 @@ export const FissuresView = ({}) => {
                         renderItem={({item}) => (
                             <ThemedView style={{justifyContent: 'space-between', margin: 10, backgroundColor: 'transparent'}}>
                                 <ThemedText style={{color: 'white'}}>{item.node}</ThemedText>
-                                <ThemedText style={{color: 'white'}}>{item.missionType}</ThemedText>
+                                <ThemedText style={{color: 'white'}}>{item.missionType} - {item.tier}</ThemedText>
                                 <ThemedText style={{color: 'white'}}>
                                     <CustomTimer
                                         targetDate={item?.expiry}
-
                                     />
                                 </ThemedText>
                             </ThemedView>

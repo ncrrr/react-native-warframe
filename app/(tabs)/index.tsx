@@ -17,14 +17,12 @@ import DatabaseManager from "@/database/DatabaseManager";
 import {FissuresView} from "@/components/home/FissuresView";
 import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 import {ThemedText} from "@/components/ThemedText";
+import {TeshinView} from "@/components/home/TeshinView";
 
 export default function HomeScreen() {
 
     const [refreshing, setRefreshing] = useState(false);
     const {wfStats, wfProfile, getApiDatas} = useContext(DataHandlerContext)
-
-    console.log(wfProfile)
-
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
@@ -35,6 +33,7 @@ export default function HomeScreen() {
     return (
         <ParallaxScrollView
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            style={{ flex: 1 }}
             headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
             headerImage={
                 <>
@@ -66,6 +65,7 @@ export default function HomeScreen() {
             {/* TODO: syndicate missions */}
             {/* TODO: fissures */}
             <FissuresView></FissuresView>
+            <TeshinView></TeshinView>
 
         </ParallaxScrollView>
     );

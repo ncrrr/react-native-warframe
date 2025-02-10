@@ -33,7 +33,6 @@ export const AlertsView = ({}) => {
                                     {item?.mission?.reward?.asString && <ThemedText style={{color: 'white'}}>{item?.mission?.reward?.asString}</ThemedText>}
 
                                 </ThemedView>
-                                Horizon
                             </ThemedView>
                         )}
                     /> :
