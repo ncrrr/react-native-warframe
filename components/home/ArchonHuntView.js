@@ -6,7 +6,7 @@ import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 import CustomTimer from "@/components/ui/CustomTimer";
 
 
-export const SortieView = ({}) => {
+export const ArchonHuntView = ({}) => {
 
     const [expandList, setExpandList] = useState(false);
 
@@ -17,15 +17,15 @@ export const SortieView = ({}) => {
     return (
         <DataHandlerContext.Consumer>
             {({wfStats, updateDatas}) => {
-                const {sortie} = wfStats
+                const {archonHunt} = wfStats
                 return (
                     <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10, maxHeight: expandList ? null : 250}}>
-                        <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Sortie</ThemedText>
+                        <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Archon Hunt</ThemedText>
                         <ThemedView style={{margin: 10, backgroundColor: '#222'}}>
                             <ThemedText type={'subtitle'}>Boss</ThemedText>
-                            <ThemedText>{sortie?.boss} - {sortie?.faction}</ThemedText>
+                            <ThemedText>{archonHunt?.boss} - {archonHunt?.faction}</ThemedText>
                             <ThemedText>Reset dans: <CustomTimer
-                                targetDate={sortie?.expiry}
+                                targetDate={archonHunt?.expiry}
                                 updateDatas={updateDatas}
                             />
                             </ThemedText>
@@ -33,19 +33,16 @@ export const SortieView = ({}) => {
                         </ThemedView>
 
                         {
-                            sortie?.variants?.length >=1 ?
+                            archonHunt?.missions?.length >=1 ?
                                 <FlatList
                                     style={{}}
                                     scrollEnabled={false}
-                                    data={sortie.variants}
-                                    keyExtractor={(item) => item.node + item.nodeKey}
+                                    data={archonHunt?.missions}
+                                    keyExtractor={(item) => item.nodeKey + item.typeKey}
                                     renderItem={({item}) => (
-                                        <ThemedView key={item.node + item.nodeKey} style={{flexDirection: 'column', justifyContent: 'space-between', margin: 10, backgroundColor: '#222', borderBottomColor: '#555', borderBottomWidth: 1}}>
-                                            <ThemedText type={'subtitle'} style={{color: 'white'}}>{item.missionType}</ThemedText>
-                                            <ThemedText style={{color: 'white'}}>{item.modifier}</ThemedText>
-                                            <ThemedText style={{color: 'white'}}>{item.modifierDescription}</ThemedText>
+                                        <ThemedView key={item.nodeKey + item.typeKey} style={{flexDirection: 'column', justifyContent: 'space-between', padding: 10, backgroundColor: '#222', borderBottomColor: '#555', borderBottomWidth: 1}}>
+                                            <ThemedText type={'subtitle'} style={{color: 'white'}}>{item.type} {item.archwingRequired ? '(Archwing)' : null}</ThemedText>
                                             <ThemedText style={{color: 'white'}}>{item.node}</ThemedText>
-                                            <ThemedText style={{color: 'white'}}>{item.tier}</ThemedText>
                                         </ThemedView>
                                     )}
                                 /> :

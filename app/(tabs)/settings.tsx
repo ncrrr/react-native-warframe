@@ -1,4 +1,4 @@
-import {StyleSheet, Image, Platform, TextInput, FlatList, Button} from 'react-native';
+import {StyleSheet, Image, Platform, TextInput, FlatList, Button, View, TouchableOpacity} from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -15,11 +15,15 @@ export default function SettingsScreen() {
     const {wfStats, wfProfile, getApiDatas} = useContext(DataHandlerContext)
 
     const [username, setUsername] = React.useState('');
+    const [lang, setLang] = React.useState('');
 
     useEffect(() => {
         (async () => {
-            const username = await AsyncStorage.getItem('username')
-            setUsername(username);
+            const aUsername = await AsyncStorage.getItem('username')
+            setUsername(aUsername);
+
+            const aLang = await AsyncStorage.getItem('lang')
+            setLang(aLang);
         })()
     }, []);
 
@@ -29,7 +33,19 @@ export default function SettingsScreen() {
 
     const handleUsernameSave = async () => {
         await AsyncStorage.setItem('username', username);
-        getApiDatas();
+        await getApiDatas();
+    }
+
+    const handleLangChange = async (text: string) => {
+        setLang(text);
+    }
+
+    const handleLangSave = async (aLang) => {
+        setLang(aLang)
+        await AsyncStorage.setItem('lang', aLang);
+        setTimeout(async () => {
+            await getApiDatas();
+        }, 1000);
     }
 
     return (
@@ -43,7 +59,16 @@ export default function SettingsScreen() {
             </ThemedView>
             <ThemedView>
                 <ThemedText type={'subtitle'}>User profile</ThemedText>
-                <TextInput style={styles.input} value={username} onChangeText={handleUsernameChange} placeholder={'Insert your Warframe username'}></TextInput>
+                <View style={styles.usernameBox}>
+                    <TextInput style={styles.input} value={username} onChangeText={handleUsernameChange} placeholder={'Insert your Warframe username'}></TextInput>
+                    <View>
+                        {
+                            !wfProfile?.displayName ?
+                                <ThemedText style={{color: 'red'}}>KO</ThemedText> :
+                                <ThemedText>{wfProfile?.displayName}</ThemedText>
+                        }
+                    </View>
+                </View>
                 <Button title={'Valider'} onPress={() => handleUsernameSave()}></Button>
             </ThemedView>
             <ThemedView>
@@ -52,8 +77,24 @@ export default function SettingsScreen() {
                     data={[
                         { label: 'English', key: 'en' },
                         { label: 'Francais', key: 'fr' },
+                        { label: 'Deutsch', key: 'de' },
+                        { label: 'Italiano', key: 'it' },
+                        { label: 'Español', key: 'es' },
+                        { label: 'Português', key: 'pt' },
+                        { label: 'Polski', key: 'pl' },
+                        { label: 'Русский', key: 'ru' },
+                        { label: '한국어', key: 'ko' },
+                        { label: '简体中文', key: 'zh' },
+                        {key: 'uk', label: 'Українська'},
                     ]}
-                    renderItem={({ item }) => <ThemedText>{item.key}</ThemedText>} />
+                    renderItem={({ item }) => (
+                        <TouchableOpacity key={item.key} style={{
+                            paddingVertical: 10, paddingHorizontal: 20, borderBottomColor: '#444', borderBottomWidth: 1, borderRadius: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                        }} onPress={() => handleLangSave(item.key)}>
+                            <ThemedText>{item.label}</ThemedText>
+                            {lang === item.key && <Ionicons color={'white'} name={'checkmark'} />}
+                        </TouchableOpacity>
+                    )} />
             </ThemedView>
         </ParallaxScrollView>
     );
@@ -73,5 +114,6 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 10,
         color: 'white'
-    }
+    },
+    usernameBox: {flexDirection: 'row', justifyContent: 'space-between'}
 });

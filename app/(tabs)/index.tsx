@@ -18,6 +18,7 @@ import {FissuresView} from "@/components/home/FissuresView";
 import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 import {ThemedText} from "@/components/ThemedText";
 import {TeshinView} from "@/components/home/TeshinView";
+import {ArchonHuntView} from "@/components/home/ArchonHuntView";
 
 export default function HomeScreen() {
 
@@ -47,6 +48,7 @@ export default function HomeScreen() {
                     </ThemedView>}
                 </>
             }>
+            <NewsView></NewsView>
             <BaroView></BaroView>
             <ThemedView style={styles.parentCycles}>
                 <ThemedView style={styles.childCycles}>
@@ -61,7 +63,7 @@ export default function HomeScreen() {
             <AlertsView></AlertsView>
             <EventsView></EventsView>
             <SortieView></SortieView>
-            <NewsView></NewsView>
+            <ArchonHuntView></ArchonHuntView>
             {/* TODO: syndicate missions */}
             {/* TODO: fissures */}
             <FissuresView></FissuresView>

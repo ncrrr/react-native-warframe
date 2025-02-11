@@ -7,13 +7,10 @@ import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 import PagerView, {usePagerView} from 'react-native-pager-view';
 
 export const NewsView = ({}) => {
-    const {wfStats} = useContext(DataHandlerContext)
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
     let anInterval = null
 
     const { ref, ...rest } = usePagerView();
-
-    const {news} = wfStats
 
     useEffect(() => {
         anInterval = setInterval(() => {
@@ -22,59 +19,66 @@ export const NewsView = ({}) => {
         return () => {
             clearInterval(anInterval)
         }
-    }, [currentItemIndex, news])
+    }, [currentItemIndex])
 
-    const slideToNext = (a) => {
+    const slideToNext = () => {
         let newIndex = 0
-        if(currentItemIndex + 1 < news?.length) {
+        if(currentItemIndex + 1 < ref.current.props?.children?.length) {
             newIndex = currentItemIndex + 1
         }
         ref.current.setPage(newIndex)
     }
 
     return (
-        <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
-            <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700, paddingBottom: 10}}>Actualités ({news?.length})</ThemedText>
-            <PagerView
-                ref={ref}
-                style={styles.container}
-                onPageSelected={(e) => {
-                    setCurrentItemIndex(e.nativeEvent.position)
-                }}
-            >
-                {
-                    news?.length >=1 ?
-                        news?.sort((a, b) => new Date(b.date) - new Date(a.date)).map((item) => (
-                            <TouchableOpacity key={item.id} style={styles.page} onPress={() => Linking.openURL(item.link)}>
-                                <ThemedView style={{position: 'relative', flexDirection: 'column', justifyContent: 'space-between', margin: 10, backgroundColor: '#222', width: '100%', height: 250}}>
-                                    <View style={{flex: 1, padding: 10, borderRadius: 100, backgroundColor: 'red'}}>
-                                        <Image
-                                            source={{uri: item.imageLink}}
-                                            style={styles.test}
-                                            fit={'cover'}
-                                        ></Image>
-                                        <View
-                                            style={[styles.test, {backgroundColor: 'black', opacity: 0.5}]}
-                                        ></View>
-                                        <View style={{position: 'absolute', bottom: 10, left: 10}}>
-                                            <ThemedText style={{color: 'white'}}>{item.message}</ThemedText>
-                                            <ThemedView style={{flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: 'transparent'}}>
-                                                <NewsTag type={item.update ? 'update' : null}></NewsTag>
-                                                <NewsTag type={item.primeAccess ? 'primeAccess' : null}></NewsTag>
-                                                <NewsTag type={item.stream ? 'stream' : null}></NewsTag>
-                                                <ThemedText style={{color: '#999'}}>{new Date(item.date).toLocaleDateString()}{item.primeAccess}</ThemedText>
+        <DataHandlerContext.Consumer>
+            {({wfStats}) => {
+                const {news} = wfStats
+                return (
+                    <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
+                        <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700, paddingBottom: 10}}>Actualités ({news?.length})</ThemedText>
+                        <PagerView
+                            ref={ref}
+                            style={styles.container}
+                            onPageSelected={(e) => {
+                                setCurrentItemIndex(e.nativeEvent.position)
+                            }}
+                        >
+                            {
+                                news?.length >=1 ?
+                                    news?.sort((a, b) => new Date(b.date) - new Date(a.date)).map((item) => (
+                                        <TouchableOpacity key={item.id} style={styles.page} onPress={() => Linking.openURL(item.link)}>
+                                            <ThemedView style={{position: 'relative', flexDirection: 'column', justifyContent: 'space-between', margin: 10, backgroundColor: '#222', width: '100%', height: 250}}>
+                                                <View style={{flex: 1, padding: 10, borderRadius: 100}}>
+                                                    <Image
+                                                        source={{uri: item.imageLink}}
+                                                        style={styles.test}
+                                                        fit={'cover'}
+                                                    ></Image>
+                                                    <View
+                                                        style={[styles.test, {backgroundColor: 'black', opacity: 0.2}]}
+                                                    ></View>
+                                                    <View style={{position: 'absolute', bottom: 10, left: 10}}>
+                                                        <ThemedText style={{color: 'white'}}>{item.message}</ThemedText>
+                                                        <ThemedView style={{flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: 'transparent'}}>
+                                                            <NewsTag type={item.update ? 'update' : null}></NewsTag>
+                                                            <NewsTag type={item.primeAccess ? 'primeAccess' : null}></NewsTag>
+                                                            <NewsTag type={item.stream ? 'stream' : null}></NewsTag>
+                                                            <ThemedText style={{color: '#999'}}>{new Date(item.date).toLocaleDateString()}{item.primeAccess}</ThemedText>
+                                                        </ThemedView>
+                                                    </View>
+                                                </View>
                                             </ThemedView>
-                                        </View>
-                                    </View>
-                                </ThemedView>
-                            </TouchableOpacity>
-                        )) :
-                        <ThemedView style={{flexDirection: 'column', justifyContent: 'space-between', margin: 10, backgroundColor: '#222', paddingBottom: 20, width: '90%'}}>
-                            <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Aucune nouvelle</ThemedText>
-                        </ThemedView>
-                }
-            </PagerView>
-        </ThemedView>
+                                        </TouchableOpacity>
+                                    )) :
+                                    <ThemedView style={{flexDirection: 'column', justifyContent: 'space-between', margin: 10, backgroundColor: '#222', paddingBottom: 20, width: '90%'}}>
+                                        <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Aucune nouvelle</ThemedText>
+                                    </ThemedView>
+                            }
+                        </PagerView>
+                    </ThemedView>
+                )
+            }}
+        </DataHandlerContext.Consumer>
     );
 }
 
