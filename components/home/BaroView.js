@@ -6,7 +6,7 @@ import {useContext, useState} from "react";
 import CustomTimer from "@/components/ui/CustomTimer";
 import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 
-
+const newDate = new Date();
 export const BaroView = ({}) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +14,7 @@ export const BaroView = ({}) => {
     const toggleModalOpen = () => {
         setIsModalOpen(!isModalOpen)
     }
+
 
     return (
         <DataHandlerContext.Consumer>
@@ -29,7 +30,7 @@ export const BaroView = ({}) => {
                                         dans: <CustomTimer
                                             targetDate={voidTrader?.expiry}
                                             updateDatas={getApiDatas}
-                                        ></CustomTimer>
+                                        />
                                     </ThemedText>
                                     <FlatList
                                         data={voidTrader.inventory}
@@ -55,7 +56,7 @@ export const BaroView = ({}) => {
                                     dans: <CustomTimer
                                         targetDate={voidTrader?.activation}
                                         updateDatas={getApiDatas}
-                                    ></CustomTimer>
+                                    />
                                 </ThemedText>
                         }
                         {

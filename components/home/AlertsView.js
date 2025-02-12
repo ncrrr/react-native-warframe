@@ -28,7 +28,7 @@ export const AlertsView = ({}) => {
                                                     <ThemedText style={{color: 'white'}}>{item.mission.node} - <CustomTimer
                                                         targetDate={item?.expiry}
                                                         updateDatas={updateDatas}
-                                                    ></CustomTimer>
+                                                    />
                                                     </ThemedText>
 
                                                 </ThemedView>

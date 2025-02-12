@@ -8,8 +8,10 @@ const CustomTimer = ({ targetDate, updateDatas }) => {
             targetDate={targetDate}
             onRender={(state, props, self) => {
                 let val;
+                const updateDatasExists = typeof updateDatas === 'function'
 
-                if (state?.complete && updateDatas) {
+                if (state?.complete && updateDatasExists) {
+                    console.log('==2')
                     updateDatas()
                     val = 'Chargement...'
                 } else {
@@ -40,8 +42,9 @@ const CustomTimer = ({ targetDate, updateDatas }) => {
                         (days < 0 ||
                         hours < 0 ||
                         minutes < 0 ||
-                        seconds < 0) && updateDatas
+                        seconds < 0) && updateDatasExists
                     ) {
+                        console.log('==1')
                         val = 'Chargement...'
                         updateDatas()
                     }

@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -60,39 +60,51 @@ export default function RootLayout() {
   }, [loaded]);
 
   const getApiDatas = async () => {
+    console.log("WILL PERFORM FETCH DATAS ...")
     try {
       const wfDatas = await getWarframeStats();
-      setWfStats(wfDatas)
+      setWfStatsContext(wfDatas)
     } catch(err) {
-        console.log('Failed getting WF datas', err)
+      console.log('Failed getting WF datas', err)
     }
 
     try {
       const wfProfileDatas = await getWarframeProfile();
-      setWfProfile(wfProfileDatas)
+      setWfProfileContext(wfProfileDatas)
     } catch(err) {
       console.log('Failed getting WF profile datas', err)
     }
   }
 
+  const setWfStatsContext = useCallback((datas) => {
+    setWfStats(datas)
+  }, [wfStats, setWfStats])
+
+  const setWfProfileContext = useCallback((datas) => {
+    setWfProfile(datas)
+  }, [wfProfile, setWfProfile])
+
+  /*const getApiDatasContext = useCallback(async () => {
+    await gatApiDatas()
+  }, [getApiDatas])*/
+
   if (!loaded) {
     return (
         <ThemedView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <ThemedText>Loading...</ThemedText>
-
+          <ThemedText>Loading...</ThemedText>
         </ThemedView>
     );
   }
 
   return (
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <DataHandlerContext.Provider value={{wfStats, wfProfile, getApiDatas}}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <DataHandlerContext.Provider value={{wfStats, wfProfile, getApiDatas/*: getApiDatasContext*/}}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style="auto" />
-          </DataHandlerContext.Provider>
-        </ThemeProvider>
+        </DataHandlerContext.Provider>
+      </ThemeProvider>
   );
 }

@@ -40,6 +40,7 @@ export const FissuresView = ({}) => {
                                             <ThemedText style={{color: 'white'}}>
                                                 <CustomTimer
                                                     targetDate={item?.expiry}
+                                                    updateDatas={updateDatas}
                                                 />
                                             </ThemedText>
                                         </ThemedView>
@@ -71,6 +72,7 @@ export const FissuresView = ({}) => {
                                                     <ThemedText style={{color: 'white'}}>
                                                         <CustomTimer
                                                             targetDate={f?.expiry}
+                                                            updateDatas={updateDatas}
                                                         />
                                                     </ThemedText>
                                                 </ThemedView>

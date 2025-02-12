@@ -27,7 +27,7 @@ export const EventsView = ({}) => {
                                             <ThemedText style={{color: 'white'}}>Expire dans: <CustomTimer
                                                 targetDate={item?.expiry}
                                                 updateDatas={getApiDatas}
-                                            ></CustomTimer>
+                                            />
                                             </ThemedText>
                                         </ThemedView>
                                     )}
