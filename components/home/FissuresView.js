@@ -13,34 +13,32 @@ export const FissuresView = ({}) => {
     const {wfStats} = useContext(DataHandlerContext)
 
     const customFissureFilter = (aFissure) => {
-        return ( aFissure.tier === "Omnia" && aFissure.isHard) && ( aFissure.missionType.toLowerCase().includes('cascade') || aFissure.missionType.toLowerCase().includes('conjonction')) ||
-            ( aFissure.isHard && ( aFissure.missionType.toLowerCase().includes('perturbation') || aFissure.missionType.toLowerCase().includes('conjonction')))
+        return ( aFissure.FissureType === "Omnia" && aFissure.IsSteelPath) ||
+            ( aFissure.IsSteelPath && ( aFissure.MissionType.toLowerCase().includes('perturbation')))
     }
 
 
     return (
         <DataHandlerContext.Consumer>
-            {({wfStats, updateDatas}) => {
-                const {fissures} = wfStats
-                const activeFissures = fissures?.filter((f) => f.active)
+            {({wfStats2, updateDatas}) => {
+                const {fissures} = wfStats2
                 return (
 
                     <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
-                        <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Fissures ({activeFissures?.length})</ThemedText>
+                        <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Fissures ({fissures?.length})</ThemedText>
 
                         {
-                            activeFissures?.filter(customFissureFilter)?.length >=1 ?
+                            fissures?.filter(customFissureFilter)?.length >=1 ?
                                 <FlatList
-                                    data={activeFissures?.filter(customFissureFilter)}
+                                    data={fissures?.filter(customFissureFilter)}
                                     keyExtractor={(item) => item.id}
                                     renderItem={({item}) => (
                                         <ThemedView key={item.id} style={{justifyContent: 'space-between', margin: 10, backgroundColor: 'transparent'}}>
-                                            <ThemedText style={{color: 'white'}}>{item.node} {item.isHard ? '- SP' : ''}</ThemedText>
-                                            <ThemedText style={{color: 'white'}}>{item.missionType} - {item.tier}</ThemedText>
+                                            <ThemedText style={{color: 'white'}}>{item.Location} {item.IsSteelPath ? '- SP' : ''}</ThemedText>
+                                            <ThemedText style={{color: 'white'}}>{item.MissionType} - {item.FissureType}</ThemedText>
                                             <ThemedText style={{color: 'white'}}>
                                                 <CustomTimer
-                                                    targetDate={item?.expiry}
-                                                    updateDatas={updateDatas}
+                                                    targetDate={item?.EndTime}
                                                 />
                                             </ThemedText>
                                         </ThemedView>
@@ -50,7 +48,7 @@ export const FissuresView = ({}) => {
 
                         }
                         {
-                            activeFissures?.length >= 1 &&
+                            fissures?.length >= 1 &&
                             <Button title={'Voir toutes les fissures'} onPress={() => setIncomingFissuresModalOpen(true)} />
                         }
                         <Modal
@@ -65,14 +63,13 @@ export const FissuresView = ({}) => {
 
                                         <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Fissures</ThemedText>
                                         {
-                                            activeFissures?.sort((a, b) => a.isHard - b.isHard)?.map((f) => (
+                                            fissures?.sort((a, b) => a.IsSteelPath - b.IsSteelPath)?.map((f) => (
                                                 <ThemedView key={f.id} style={{justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, borderBottomColor: 'grey', backgroundColor: 'transparent'}}>
-                                                    <ThemedText style={{color: 'white'}}>{f.node} {f.isHard ? '- SP' : ''}</ThemedText>
-                                                    <ThemedText style={{color: 'white'}}>{f.missionType} - {f.tier}</ThemedText>
+                                                    <ThemedText style={{color: 'white'}}>{f.Location} {f.IsSteelPath ? '- SP' : ''}</ThemedText>
+                                                    <ThemedText style={{color: 'white'}}>{f.MissionType} - {f.FissureType}</ThemedText>
                                                     <ThemedText style={{color: 'white'}}>
                                                         <CustomTimer
-                                                            targetDate={f?.expiry}
-                                                            updateDatas={updateDatas}
+                                                            targetDate={f?.EndTime}
                                                         />
                                                     </ThemedText>
                                                 </ThemedView>

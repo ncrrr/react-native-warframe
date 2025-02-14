@@ -18,18 +18,20 @@ export const BaroView = ({}) => {
 
     return (
         <DataHandlerContext.Consumer>
-            {({wfStats, getApiDatas}) => {
-                const {voidTrader} = wfStats
+            {({wfStats2, getApiDatas}) => {
+                console.log(wfStats2)
+                const {void_traders} = wfStats2
+                if(!void_traders) return null
+                let voidTrader = void_traders[0]
                 return (
                     <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
                         <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Baro Ki'Teer</ThemedText>
                         {
-                            wfStats?.voidTrader?.inventory?.length >= 1 ?
+                            voidTrader?.inventory?.length >= 1 ?
                                 <>
                                     <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Termine
                                         dans: <CustomTimer
-                                            targetDate={voidTrader?.expiry}
-                                            updateDatas={getApiDatas}
+                                            targetDate={voidTrader?.Departure}
                                         />
                                     </ThemedText>
                                     <FlatList
@@ -51,18 +53,14 @@ export const BaroView = ({}) => {
                                             </ThemedView>
                                         )}
                                     />
+                                    <Button onPress={() => toggleModalOpen()}
+                                            title={isModalOpen ? 'Cacher' : 'Afficher'}></Button>
                                 </> :
                                 <ThemedText style={{textAlign: 'center', fontStyle: 'italic', color: 'grey'}}>Ouvre
                                     dans: <CustomTimer
-                                        targetDate={voidTrader?.activation}
-                                        updateDatas={getApiDatas}
+                                        targetDate={voidTrader?.Arrival}
                                     />
                                 </ThemedText>
-                        }
-                        {
-                            // only show this button if the trader is active
-                            voidTrader?.active && <Button onPress={() => toggleModalOpen()}
-                                                          title={isModalOpen ? 'Cacher' : 'Afficher'}></Button>
                         }
                     </ThemedView>
                 )

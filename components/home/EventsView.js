@@ -19,11 +19,12 @@ export const EventsView = ({}) => {
                         {
                             events?.length >=1 ?
                                 <FlatList
-                                    data={events.sort((a, b) => new Date(b.expiry) - new Date(a.expiry))}
+                                    data={events.sort((a, b) => new Date(b.Ends) - new Date(a.Ends))}
                                     keyExtractor={(item) => item.id}
                                     renderItem={({item}) => (
                                         <ThemedView style={{flexDirection: 'column', justifyContent: 'space-between', margin: 10, backgroundColor: '#222', paddingBottom: 20, borderBottomColor: '#555', borderBottomWidth: 1}}>
-                                            <ThemedText style={{color: 'white'}}>{item.asString}</ThemedText>
+                                            <ThemedText style={{color: 'white'}}>{item.EventName}{ - item.Node}</ThemedText>
+                                            <ThemedText style={{color: 'white'}}>{item.EventDescription}</ThemedText>
                                             <ThemedText style={{color: 'white'}}>Expire dans: <CustomTimer
                                                 targetDate={item?.expiry}
                                                 updateDatas={getApiDatas}

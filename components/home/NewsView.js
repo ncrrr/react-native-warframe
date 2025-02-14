@@ -31,8 +31,8 @@ export const NewsView = ({}) => {
 
     return (
         <DataHandlerContext.Consumer>
-            {({wfStats}) => {
-                const {news} = wfStats
+            {({wfStats2}) => {
+                const {news} = wfStats2
                 return (
                     <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
                         <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700, paddingBottom: 10}}>Actualités ({news?.length})</ThemedText>
@@ -45,25 +45,33 @@ export const NewsView = ({}) => {
                         >
                             {
                                 news?.length >=1 ?
-                                    news?.sort((a, b) => new Date(b.date) - new Date(a.date)).map((item) => (
-                                        <TouchableOpacity key={item.id} style={styles.page} onPress={() => Linking.openURL(item.link)}>
+                                    news?.sort((a, b) => new Date(b.Posted) - new Date(a.Posted)).map((item) => (
+                                        <TouchableOpacity key={item.id} style={styles.page} onPress={() => Linking.openURL(item.URL)}>
                                             <ThemedView style={{position: 'relative', flexDirection: 'column', justifyContent: 'space-between', margin: 10, backgroundColor: '#222', width: '100%', height: 250}}>
-                                                <View style={{flex: 1, padding: 10, borderRadius: 100}}>
-                                                    <Image
-                                                        source={{uri: item.imageLink}}
-                                                        style={styles.test}
-                                                        fit={'cover'}
-                                                    ></Image>
+                                                <View style={{flex: 1, padding: 10, borderRadius: 20, overflow: 'hidden'}}>
+                                                    {
+                                                        item.Image ?
+                                                            <Image
+                                                                source={{uri: item.Image}}
+                                                                style={styles.test}
+                                                                resizeMode={'cover'}
+                                                            ></Image> :
+                                                            <Image
+                                                                source={require('@/assets/images/default-news-background.jpg')}
+                                                                style={styles.test}
+                                                                resizeMode={'cover'}
+                                                            ></Image>
+                                                    }
                                                     <View
                                                         style={[styles.test, {backgroundColor: 'black', opacity: 0.2}]}
                                                     ></View>
                                                     <View style={{position: 'absolute', bottom: 10, left: 10}}>
-                                                        <ThemedText style={{color: 'white'}}>{item.message}</ThemedText>
+                                                        <ThemedText style={{color: 'white'}}>{item.Title}</ThemedText>
                                                         <ThemedView style={{flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: 'transparent'}}>
-                                                            <NewsTag type={item.update ? 'update' : null}></NewsTag>
-                                                            <NewsTag type={item.primeAccess ? 'primeAccess' : null}></NewsTag>
-                                                            <NewsTag type={item.stream ? 'stream' : null}></NewsTag>
-                                                            <ThemedText style={{color: '#999'}}>{new Date(item.date).toLocaleDateString()}{item.primeAccess}</ThemedText>
+                                                            <NewsTag type={item.IsEvent ? 'update' : null}></NewsTag>
+                                                            <NewsTag type={item.Title?.includes('Prime Access') ? 'primeAccess' : null}></NewsTag>
+                                                            <NewsTag type={item.LiveIndicator ? 'stream' : null}></NewsTag>
+                                                            <ThemedText style={{color: '#999'}}>{new Date(item.Posted_ISO).toLocaleDateString()}</ThemedText>
                                                         </ThemedView>
                                                     </View>
                                                 </View>
@@ -86,7 +94,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: '250',
+        height: '250'
     },
     page: {
         justifyContent: 'center',
@@ -94,7 +102,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     test: {
-        position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, borderRadius: 20
+        position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, borderRadius: 20, objectFit: 'cover'
     }
 });
 
@@ -105,7 +113,7 @@ const NewsTag = ({type}) => {
     } else if (type === 'primeAccess') {
         return <ThemedText style={[tagStyle, {backgroundColor: 'darkorange'}]}>Prime</ThemedText>
     } else if(type === 'stream') {
-        return <ThemedText style={[tagStyle, {backgroundColor: 'purple'}]}>Stream</ThemedText>
+        return <ThemedText style={[tagStyle, {backgroundColor: 'purple'}]}>Live</ThemedText>
     } else {
         return null
     }

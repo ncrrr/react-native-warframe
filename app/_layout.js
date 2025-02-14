@@ -13,13 +13,18 @@ import {getWarframeProfile} from "@/api/warframeProfile";
 import {AppState, View} from "react-native";
 import {ThemedText} from "@/components/ThemedText";
 import {ThemedView} from "@/components/ThemedView";
+import {getWarframeStats2} from "../api/warframeStats";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+let apiRefreshInterval
+const apiRefreshIntervalTime = 1000 * 30 // 30 sec
 
 export default function RootLayout() {
   const [wfStats, setWfStats] = useState({});
+  const [wfStats2, setWfStats2] = useState({});
   const [wfProfile, setWfProfile] = useState({});
+  const [isApiLoading, setIsApiLoading] = useState(true);
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
@@ -30,10 +35,6 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-
-    (async () => {
-      await getApiDatas();
-    })()
 
     if (loaded) {
       SplashScreen.hideAsync();
@@ -54,51 +55,49 @@ export default function RootLayout() {
       console.log('AppState', appState.current);
     });
 
+    getApiDatas();
+
+
+    apiRefreshInterval = setInterval(async () => {
+      console.log('API REFRESH INTERVAL')
+      await getApiDatas();
+    }, apiRefreshIntervalTime)
+
     return () => {
       subscription.remove();
+      clearInterval(apiRefreshInterval)
     };
-  }, [loaded]);
+  }, []);
 
   const getApiDatas = async () => {
     console.log("WILL PERFORM FETCH DATAS ...")
-    try {
-      const wfDatas = await getWarframeStats();
-      setWfStatsContext(wfDatas)
-    } catch(err) {
-      console.log('Failed getting WF datas', err)
-    }
 
     try {
-      const wfProfileDatas = await getWarframeProfile();
-      setWfProfileContext(wfProfileDatas)
+      const wfDatas = await getWarframeStats2();
+      setWfStats2(wfDatas)
     } catch(err) {
       console.log('Failed getting WF profile datas', err)
     }
+    console.log('END API CALLS')
+    setIsApiLoading(false)
   }
 
   const setWfStatsContext = useCallback((datas) => {
     setWfStats(datas)
   }, [wfStats, setWfStats])
 
+  const setWfStatsContext2 = useCallback((datas) => {
+    setWfStats2(datas)
+  }, [wfStats2, setWfStats2])
+
   const setWfProfileContext = useCallback((datas) => {
     setWfProfile(datas)
   }, [wfProfile, setWfProfile])
 
-  /*const getApiDatasContext = useCallback(async () => {
-    await gatApiDatas()
-  }, [getApiDatas])*/
-
-  if (!loaded) {
-    return (
-        <ThemedView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <ThemedText>Loading...</ThemedText>
-        </ThemedView>
-    );
-  }
 
   return (
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <DataHandlerContext.Provider value={{wfStats, wfProfile, getApiDatas/*: getApiDatasContext*/}}>
+        <DataHandlerContext.Provider value={{wfStats, wfStats2, wfProfile, getApiDatas}}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />

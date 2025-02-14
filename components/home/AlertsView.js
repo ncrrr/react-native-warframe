@@ -4,13 +4,14 @@ import {ThemedText} from "../ThemedText";
 import CustomTimer from "@/components/ui/CustomTimer";
 import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 import {useContext} from "react";
+import {getActivePeriod} from "@/utils/dates";
 
 export const AlertsView = ({}) => {
 
     return (
         <DataHandlerContext.Consumer>
-            {({wfStats, updateDatas}) => {
-                const {alerts} = wfStats
+            {({wfStats2, updateDatas}) => {
+                const {alerts} = wfStats2
                 return (
                     <ThemedView style={{backgroundColor: '#222', borderRadius: 15, padding: 10}}>
                         <ThemedText type={'title'} style={{fontSize: 28, textAlign: 'center', fontWeight: 700}}>Alertes ({alerts?.length})</ThemedText>
@@ -23,11 +24,11 @@ export const AlertsView = ({}) => {
                                     renderItem={({item}) => (
                                         <ThemedView style={{margin: 10, backgroundColor: 'transparent', borderBottomColor: '#555', borderBottomWidth: 1, "paddingBottom": 20}}>
                                             <ThemedView style={{backgroundColor: 'transparent'}}>
-                                                <ThemedText style={{color: 'white'}}>{item.mission.type}</ThemedText>
+                                                <ThemedText style={{color: 'white'}}>{item.MissionType} ({item.Level})</ThemedText>
+                                                <ThemedText style={{color: 'white'}}>{item.Rewards.credits}cr {item.Rewards?.items?.length >= 1 ? `+ ${item.Rewards?.items.map(i => i)}`: ''}</ThemedText>
                                                 <ThemedView style={{flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'transparent'}}>
-                                                    <ThemedText style={{color: 'white'}}>{item.mission.node} - <CustomTimer
-                                                        targetDate={item?.expiry}
-                                                        updateDatas={updateDatas}
+                                                    <ThemedText style={{color: 'white'}}>{item.Location || 'Unknown'} - <CustomTimer
+                                                        targetDate={item?.EndTime}
                                                     />
                                                     </ThemedText>
 
