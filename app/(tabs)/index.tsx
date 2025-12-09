@@ -2,7 +2,7 @@ import {Image, StyleSheet, Platform, RefreshControl, SafeAreaView} from 'react-n
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import {useCallback, useContext, useEffect, useState} from "react";
-import {getWarframeStats} from "@/api/warframeStats";
+import {getWarframeStats} from "@/api/warframeWorldState";
 import {AlertsView} from "@/components/home/AlertsView";
 import {NewsView} from "@/components/home/NewsView";
 import {EventsView} from "@/components/home/EventsView";
@@ -19,15 +19,19 @@ import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 import {ThemedText} from "@/components/ThemedText";
 import {TeshinView} from "@/components/home/TeshinView";
 import {ArchonHuntView} from "@/components/home/ArchonHuntView";
+import {DataContext} from "@/types/context";
 
 export default function HomeScreen() {
 
     const [refreshing, setRefreshing] = useState(false);
-    const {wfStats, wfProfile, getApiDatas} = useContext(DataHandlerContext)
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
-        await getApiDatas();
+        // we will emit a refresh event for the all the customTimers
+        const refreshEvent = new Event('refreshTimers');
+        window.dispatchEvent(refreshEvent);
+        await setTimeout(() => {}, 1000); // wait for 1 second to simulate data fetching
+
         setRefreshing(false);
     }, []);
 
@@ -42,10 +46,10 @@ export default function HomeScreen() {
                         source={require('@/assets/images/warframe-icon.png')}
                         style={styles.reactLogo}
                     />
-                    {wfProfile?.displayName && <ThemedView style={styles.userInfos}>
+                    {/*wfProfile?.displayName && <ThemedView style={styles.userInfos}>
                         <ThemedText style={styles.masteryRank}>{wfProfile?.displayName?.slice(0, -1)}</ThemedText>
                         <ThemedText style={styles.masteryRank}>MR {wfProfile?.masteryRank}</ThemedText>
-                    </ThemedView>}
+                    </ThemedView>*/}
                 </>
             }>
             <NewsView></NewsView>

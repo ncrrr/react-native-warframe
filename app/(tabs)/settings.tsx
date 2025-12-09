@@ -12,18 +12,18 @@ import {AsyncStorage} from "expo-sqlite/kv-store";
 import {DataHandlerContext} from "@/contexts/DataHandlerContext";
 
 export default function SettingsScreen() {
-    const {wfStats, wfProfile, getApiDatas} = useContext(DataHandlerContext)
+    const {wfStats, getApiDatas} = useContext(DataHandlerContext)
 
-    const [username, setUsername] = React.useState('');
-    const [lang, setLang] = React.useState('');
+    const [username, setUsername] = React.useState<string>('');
+    const [lang, setLang] = React.useState<string>('');
 
     useEffect(() => {
         (async () => {
             const aUsername = await AsyncStorage.getItem('username')
-            setUsername(aUsername);
+              setUsername(aUsername || 'N/A');
 
             const aLang = await AsyncStorage.getItem('lang')
-            setLang(aLang);
+            setLang(aLang || 'en');
         })()
     }, []);
 
@@ -40,7 +40,7 @@ export default function SettingsScreen() {
         setLang(text);
     }
 
-    const handleLangSave = async (aLang) => {
+    const handleLangSave = async (aLang: string) => {
         setLang(aLang)
         await AsyncStorage.setItem('lang', aLang);
         setTimeout(async () => {
@@ -62,11 +62,11 @@ export default function SettingsScreen() {
                 <View style={styles.usernameBox}>
                     <TextInput style={styles.input} value={username} onChangeText={handleUsernameChange} placeholder={'Insert your Warframe username'}></TextInput>
                     <View>
-                        {
+                        {/*
                             !wfProfile?.displayName ?
                                 <ThemedText style={{color: 'red'}}>KO</ThemedText> :
                                 <ThemedText>{wfProfile?.displayName}</ThemedText>
-                        }
+                        */}
                     </View>
                 </View>
                 <Button title={'Valider'} onPress={() => handleUsernameSave()}></Button>

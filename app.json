@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "react-native-notes",
-    "slug": "react-native-notes",
+    "name": "react-native-warframe",
+    "slug": "react-native-warframe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,13 +10,14 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ncarriere.react-native-notes"
+      "bundleIdentifier": "com.ncarriere.react-native-warframe"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ncarriere.reactnativewarframe"
     },
     "web": {
       "bundler": "metro",
